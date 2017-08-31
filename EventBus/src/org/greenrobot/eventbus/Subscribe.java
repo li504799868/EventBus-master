@@ -26,6 +26,9 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
+/**
+ * 自定义直接，在编译库中使用的就是他
+ * */
 public @interface Subscribe {
     ThreadMode threadMode() default ThreadMode.POSTING;
 

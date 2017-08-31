@@ -44,10 +44,15 @@ final class PendingPost {
         return new PendingPost(event, subscription);
     }
 
+    /**
+     * 回收利用PendingPost对象
+     * */
     static void releasePendingPost(PendingPost pendingPost) {
+        // 重置内部的属性值
         pendingPost.event = null;
         pendingPost.subscription = null;
         pendingPost.next = null;
+        // 把PendingPost对象加入到缓存中，缓存的最大个数为9999
         synchronized (pendingPostPool) {
             // Don't let the pool grow indefinitely
             if (pendingPostPool.size() < 10000) {

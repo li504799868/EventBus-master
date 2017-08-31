@@ -19,6 +19,8 @@ import android.util.Log;
 
 /**
  * Posts events in background.
+ *
+ *  本身就是一个Runnable对象
  * 
  * @author Markus
  */
@@ -34,10 +36,14 @@ final class BackgroundPoster implements Runnable {
         queue = new PendingPostQueue();
     }
 
+    /**
+     * 加入队列处理
+     * */
     public void enqueue(Subscription subscription, Object event) {
         PendingPost pendingPost = PendingPost.obtainPendingPost(subscription, event);
         synchronized (this) {
             queue.enqueue(pendingPost);
+            // 如果线程池没有在运行，启动线程池执行这个线程
             if (!executorRunning) {
                 executorRunning = true;
                 eventBus.getExecutorService().execute(this);
@@ -49,6 +55,7 @@ final class BackgroundPoster implements Runnable {
     public void run() {
         try {
             try {
+                // 循环处理队列中的事件
                 while (true) {
                     PendingPost pendingPost = queue.poll(1000);
                     if (pendingPost == null) {

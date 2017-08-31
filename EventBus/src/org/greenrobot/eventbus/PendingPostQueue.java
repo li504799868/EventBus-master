@@ -16,10 +16,16 @@
 
 package org.greenrobot.eventbus;
 
+/**
+ * 自定义链表
+ * */
 final class PendingPostQueue {
     private PendingPost head;
     private PendingPost tail;
 
+    /**
+     * 加入元素
+     * */
     synchronized void enqueue(PendingPost pendingPost) {
         if (pendingPost == null) {
             throw new NullPointerException("null cannot be enqueued");
@@ -35,6 +41,9 @@ final class PendingPostQueue {
         notifyAll();
     }
 
+    /**
+     * 取出头部的元素
+     * */
     synchronized PendingPost poll() {
         PendingPost pendingPost = head;
         if (head != null) {
@@ -46,6 +55,9 @@ final class PendingPostQueue {
         return pendingPost;
     }
 
+    /**
+     * 延迟取出头部的元素
+     * */
     synchronized PendingPost poll(int maxMillisToWait) throws InterruptedException {
         if (head == null) {
             wait(maxMillisToWait);

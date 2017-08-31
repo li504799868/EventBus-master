@@ -34,6 +34,9 @@ final class HandlerPoster extends Handler {
         queue = new PendingPostQueue();
     }
 
+    /**
+     * 处理队列中的Event
+     * */
     void enqueue(Subscription subscription, Object event) {
         PendingPost pendingPost = PendingPost.obtainPendingPost(subscription, event);
         synchronized (this) {
@@ -53,17 +56,22 @@ final class HandlerPoster extends Handler {
         try {
             long started = SystemClock.uptimeMillis();
             while (true) {
+                // 取出队列中的第一个
                 PendingPost pendingPost = queue.poll();
+                // 如果为空
                 if (pendingPost == null) {
                     synchronized (this) {
                         // Check again, this time in synchronized
+                        // 再取出一个
                         pendingPost = queue.poll();
+                        // 如果还是空的，执行结束
                         if (pendingPost == null) {
                             handlerActive = false;
                             return;
                         }
                     }
                 }
+                // 这里在主线程中调用了被注解的方法
                 eventBus.invokeSubscriber(pendingPost);
                 long timeInMethod = SystemClock.uptimeMillis() - started;
                 if (timeInMethod >= maxMillisInsideHandleMessage) {

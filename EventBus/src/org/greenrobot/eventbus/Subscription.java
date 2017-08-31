@@ -15,6 +15,9 @@
  */
 package org.greenrobot.eventbus;
 
+/**
+ * 这个类中保存了Class 和 被注解的方法
+ * */
 final class Subscription {
     final Object subscriber;
     final SubscriberMethod subscriberMethod;

@@ -18,6 +18,11 @@ package org.greenrobot.eventbus;
 import java.lang.reflect.Method;
 
 /** Used internally by EventBus and generated subscriber indexes. */
+/**
+ * 保存了被注解的方法的信息
+ *
+ *      方法名 执行的线程 Event 优先级 是否是StickyEvent
+ * */
 public class SubscriberMethod {
     final Method method;
     final ThreadMode threadMode;
@@ -25,6 +30,7 @@ public class SubscriberMethod {
     final int priority;
     final boolean sticky;
     /** Used for efficient comparison */
+    // 方法的字符串，用来检查是否是同一个方法
     String methodString;
 
     public SubscriberMethod(Method method, Class<?> eventType, ThreadMode threadMode, int priority, boolean sticky) {
