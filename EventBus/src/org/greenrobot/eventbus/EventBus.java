@@ -46,9 +46,7 @@ public class EventBus {
     static volatile EventBus defaultInstance;
 
     private static final EventBusBuilder DEFAULT_BUILDER = new EventBusBuilder();
-    /**
-     * 缓存的Event和 对应的Class列表
-     * */
+    /***/
     private static final Map<Class<?>, List<Class<?>>> eventTypesCache = new HashMap<>();
 
     /**
@@ -314,6 +312,7 @@ public class EventBus {
      * */
     public void post(Object event) {
         // 通过工厂类，获取一个执行状态类
+        // 每一个线程对应一个
         PostingThreadState postingState = currentPostingThreadState.get();
         // 把Event加入到队列中
         List<Object> eventQueue = postingState.eventQueue;
@@ -460,7 +459,7 @@ public class EventBus {
         boolean subscriptionFound = false;
         // 如果Event是支持继承的
         if (eventInheritance) {
-            // 找到使用Event的Class列表
+            // 找到使用Event的父类
             List<Class<?>> eventTypes = lookupAllEventTypes(eventClass);
             int countTypes = eventTypes.size();
             for (int h = 0; h < countTypes; h++) {
@@ -525,7 +524,7 @@ public class EventBus {
     }
 
     /**
-     * 响应之前的StickyEvent
+     * 根据不同的ThreadMode，回调被绑定的方法
      * */
     private void postToSubscription(Subscription subscription, Object event, boolean isMainThread) {
         // 响应的线程

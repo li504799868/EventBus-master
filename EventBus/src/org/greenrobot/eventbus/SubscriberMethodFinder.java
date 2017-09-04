@@ -104,7 +104,7 @@ class SubscriberMethodFinder {
                 // 通过遍历被注解的方法
                 SubscriberMethod[] array = findState.subscriberInfo.getSubscriberMethods();
                 for (SubscriberMethod subscriberMethod : array) {
-                    // 检查房是否添加成功，
+                    // 检查方法是否添加成功，
                     if (findState.checkAdd(subscriberMethod.method, subscriberMethod.eventType)) {
                         findState.subscriberMethods.add(subscriberMethod);
                     }
@@ -161,7 +161,7 @@ class SubscriberMethodFinder {
     }
 
     /**
-     *
+     * 获取被注解的方法的信息
      * */
     private SubscriberInfo getSubscriberInfo(FindState findState) {
         // 如果查找类本身有注解相关的信息，因为是异步的，有可能这个类还是被回收
@@ -225,7 +225,7 @@ class SubscriberMethodFinder {
             int modifiers = method.getModifiers();
             // 如果是public 并且忽略几种类的情况（抽象类，静态类等）
             if ((modifiers & Modifier.PUBLIC) != 0 && (modifiers & MODIFIERS_IGNORE) == 0) {
-                // 得到房阿德参数类型数组
+                // 得到方法参数类型数组
                 Class<?>[] parameterTypes = method.getParameterTypes();
                 // 参数的个数是1
                 if (parameterTypes.length == 1) {

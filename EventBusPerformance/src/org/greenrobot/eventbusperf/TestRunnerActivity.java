@@ -60,6 +60,7 @@ public class TestRunnerActivity extends Activity {
             textViewResult.append("Subscribers: " + testParams.getSubscriberCount() + "\n\n");
             testRunner.start();
         }
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
